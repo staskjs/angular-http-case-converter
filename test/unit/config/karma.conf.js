@@ -1,15 +1,19 @@
 'use strict';
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
         frameworks: ['jasmine'],
         basePath: '../../../',
         files: [
-            'test/unit/bower_components/angular/angular.min.js',
+            'test/unit/bower_components/angular/angular.js',
             'test/unit/bower_components/angular-mocks/angular-mocks.js',
             'src/**/*.defs.js',
             'test/unit/spec/**/*.defs.js',
+            'test/**/*.json',
         ],
+        preprocessors: {
+            '**/*.json': 'json2js',
+        },
         port: 8080,
         runnerPort: 9100,
         logLevel: config.LOG_INFO,
@@ -19,6 +23,6 @@ module.exports = function(config) {
         reporters: ['progress'],
         colors: true,
         captureTimeout: 60000,
-        reportSlowerThan: 10,
+        reportSlowerThan: 20,
     });
 };

@@ -1,0 +1,50 @@
+{
+    "mixed": {
+        "aa_bb": "cc_dd",
+        "_ee_ff_gg": {
+            "hh_ii_jj_": "zzz_xxx"
+        },
+        "kkk-l": "cc_dd",
+        "-mmm-nnnOo": {
+            "pp-r-sss-": "yyy-vvv"
+        },
+        "pRrrSss": {
+            "-t-uuVvWww-xxx_zzz": [
+                "yyy-vvv",
+                "www_xx"
+            ]
+        }
+    },
+    "afterSnakeToCamel": {
+        "aaBb": "cc_dd",
+        "EeFfGg": {
+            "hhIiJj_": "zzz_xxx"
+        },
+        "kkk-l": "cc_dd",
+        "-mmm-nnnOo": {
+            "pp-r-sss-": "yyy-vvv"
+        },
+        "pRrrSss": {
+            "-t-uuVvWww-xxxZzz": [
+                "yyy-vvv",
+                "www_xx"
+            ]
+        }
+    },
+    "afterCamelToSnake": {
+        "aa_bb": "cc_dd",
+        "_ee_ff_gg": {
+            "hh_ii_jj_": "zzz_xxx"
+        },
+        "kkk-l": "cc_dd",
+        "-mmm-nnn_oo": {
+            "pp-r-sss-": "yyy-vvv"
+        },
+        "p_rrr_sss": {
+            "-t-uu_vv_www-xxx_zzz": [
+                "yyy-vvv",
+                "www_xx"
+            ]
+        }
+    }
+}

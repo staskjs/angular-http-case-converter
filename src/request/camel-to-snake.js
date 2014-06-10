@@ -17,11 +17,14 @@
                 function (eeHttpCaseConverterUtils, eeHttpCaseConverterSettings) {
                     return {
                         request: function (requestConfig) {
-                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake(requestConfig)) {
-                                requestConfig.params =
-                                    eeHttpCaseConverterUtils.convertObjectKeyCaseFromCamelToSnake(requestConfig.params);
+                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake.data(requestConfig)) {
+                                requestConfig.data =
+                                    eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(requestConfig.data);
                             }
-
+                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake.params(requestConfig)) {
+                                requestConfig.params =
+                                    eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(requestConfig.params);
+                            }
                             return requestConfig;
                         },
                     };

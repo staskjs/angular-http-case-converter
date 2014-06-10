@@ -12,8 +12,14 @@
             const caseConverterSettingsProvider = this;
 
             caseConverterSettingsProvider.requestConfig = {
-                camelToSnake: function (requestConfig) {
-                    return !!requestConfig.params;
+                camelToSnake: {
+                    data: function (config) {
+                        // Only POST and PUT methods can have data
+                        return ['PUT', 'POST'].indexOf(config.method) > -1 && !!config.data;
+                    },
+                    params: function (config) {
+                        return !!config.params;
+                    },
                 },
             };
 

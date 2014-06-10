@@ -38,8 +38,10 @@
                 };
             }
 
-            this.convertObjectKeyCaseFromSnakeToCamel = createConverterFunction($filter('snakeToCamel'));
-            this.convertObjectKeyCaseFromCamelToSnake = createConverterFunction($filter('camelToSnake'));
+            this.convertKeyCase = {
+                snakeToCamel: createConverterFunction($filter('snakeToCamel')),
+                camelToSnake: createConverterFunction($filter('camelToSnake')),
+            };
         });
 
 })();

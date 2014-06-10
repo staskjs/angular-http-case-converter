@@ -1,44 +1,11 @@
 /**
- * Module provides a way to convert requests and responses on the fly in a drop-in manner.
- *
- * # How to use?
- *
- * Decide what type of convertion you want to use. Currently the package provides modules:
- *
- * - `ee.$http.CaseConverter.request.camelToSnake` that converts request params case from camel case used in the
- *   AngularJS application to snake case (a.k.a. underscore notation) used in the backend which is default for both
- *   Symfony FOSRestBundle and Django.
- *
- * - 'ee.$http.CaseConverter.response.snakeToCamel' that converts response JSON objects from snake case to camel case.
- *
- * All you have to do is to depend your main module on the chosen package modules:
- * ```
- * var myApp = angular.module('app', [
- *     'ee.$http.CaseConverter.request.camelToSnake',
- *     'ee.$http.CaseConverter.response.snakeToCamel',
- * ])
- * ```
- * You may also use `caseConverterSettingsProvider` to define custom conditions under which processing takes place.
- * By default every request with any params and every response returned as `application/json` is processed.
- * If you wish only certain requests/responses to be process use:
- *
- * ```
- * myApp.config(function (caseConverterSettingsProvider) {
- *     caseConverterSettingsProvider.requestConfig = {
- *         camelToSnake: function (requestConfig) {
- *             // Your custom logic to decide whether process or not. Should return a boolean.
- *         }
- *     }
- * })
- * ```
- *
  * @author Jarek Rencz <jarek.rencz@laboratorium.ee> - current implementation
  * @author Michał Gołębiowski <michal.golebiowski@laboratorium.ee> - original idea
  * @author Mikołaj Dądela <mikolaj.dadela@laboratorium.ee> - object converter code
  *
  * (c) Laboratorium EE 2014
  */
-(function (angular) {
+(function () {
     'use strict';
 
     angular
@@ -68,11 +35,14 @@
                 ["eeHttpCaseConverterUtils", "eeHttpCaseConverterSettings", function (eeHttpCaseConverterUtils, eeHttpCaseConverterSettings) {
                     return {
                         request: function (requestConfig) {
-                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake(requestConfig)) {
-                                requestConfig.params =
-                                    eeHttpCaseConverterUtils.convertObjectKeyCaseFromCamelToSnake(requestConfig.params);
+                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake.data(requestConfig)) {
+                                requestConfig.data =
+                                    eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(requestConfig.data);
                             }
-
+                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake.params(requestConfig)) {
+                                requestConfig.params =
+                                    eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(requestConfig.params);
+                            }
                             return requestConfig;
                         },
                     };
@@ -102,8 +72,7 @@
                     return {
                         response: function (response) {
                             if (eeHttpCaseConverterSettings.condition.response.snakeToCamel(response)) {
-                                response.data =
-                                    eeHttpCaseConverterUtils.convertObjectKeyCaseFromSnakeToCamel(response.data);
+                                response.data = eeHttpCaseConverterUtils.convertKeyCase.snakeToCamel(response.data);
                             }
                             return response;
                         },
@@ -115,11 +84,11 @@
 })();
 
 /**
- * @author Jarek Rencz <jarek.rencz@laboratorium.ee> - current implementation
+ * @author Jarek Rencz <jarek.rencz@laboratorium.ee>
  *
  * (c) Laboratorium EE 2014
  */
-(function (angular) {
+(function () {
     'use strict';
 
     angular
@@ -128,8 +97,14 @@
             var caseConverterSettingsProvider = this;
 
             caseConverterSettingsProvider.requestConfig = {
-                camelToSnake: function (requestConfig) {
-                    return !!requestConfig.params;
+                camelToSnake: {
+                    data: function (config) {
+                        // Only POST and PUT methods can have data
+                        return ['PUT', 'POST'].indexOf(config.method) > -1 && !!config.data;
+                    },
+                    params: function (config) {
+                        return !!config.params;
+                    },
                 },
             };
 
@@ -155,7 +130,7 @@
             };
         });
 
-})(angular);
+})();
 
 /**
  * @author Jarek Rencz <jarek.rencz@laboratorium.ee> - package maintainer
@@ -163,7 +138,7 @@
  *
  * (c) Laboratorium EE 2014
  */
-(function (angular) {
+(function () {
     'use strict';
 
     angular
@@ -197,8 +172,10 @@
                 };
             }
 
-            this.convertObjectKeyCaseFromSnakeToCamel = createConverterFunction($filter('snakeToCamel'));
-            this.convertObjectKeyCaseFromCamelToSnake = createConverterFunction($filter('camelToSnake'));
+            this.convertKeyCase = {
+                snakeToCamel: createConverterFunction($filter('snakeToCamel')),
+                camelToSnake: createConverterFunction($filter('camelToSnake')),
+            };
         }]);
 
-})(angular);
+})();

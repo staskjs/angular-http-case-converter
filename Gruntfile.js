@@ -87,6 +87,7 @@ module.exports = function (grunt) {
                 src: [
                     'Gruntfile.js',
                     'src/**/*.js',
+                    'test/unit/config/karma.conf.js',
                     'test/unit/spec/**/*.spec.js',
                 ],
             },
@@ -97,6 +98,14 @@ module.exports = function (grunt) {
                 options: {
                     config: '.jscs.json',
                 },
+            },
+        },
+        jsonlint: {
+            all: {
+                src: [
+                    '*.json',
+                    '{src,test}/**/*.json',
+                ],
             },
         },
         'merge-conflict': {
@@ -119,6 +128,7 @@ module.exports = function (grunt) {
     grunt.registerTask('lint', [
         'jshint',
         'jscs',
+        'jsonlint',
         'merge-conflict',
     ]);
 

@@ -18,8 +18,7 @@
                     return {
                         response: function (response) {
                             if (eeHttpCaseConverterSettings.condition.response.snakeToCamel(response)) {
-                                response.data =
-                                    eeHttpCaseConverterUtils.convertObjectKeyCaseFromSnakeToCamel(response.data);
+                                response.data = eeHttpCaseConverterUtils.convertKeyCase.snakeToCamel(response.data);
                             }
                             return response;
                         },

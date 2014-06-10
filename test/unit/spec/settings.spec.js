@@ -11,28 +11,35 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
             eeHttpCaseConverterSettings = _eeHttpCaseConverterSettings_;
         }));
 
-        it('should be an object with 2 conditions predefined', function () {
-            expect(typeof eeHttpCaseConverterSettings.condition.request.camelToSnake).toBe('function');
+        it('should be an object with 3 conditions predefined', function () {
+            expect(typeof eeHttpCaseConverterSettings.condition.request.camelToSnake.data).toBe('function');
+            expect(typeof eeHttpCaseConverterSettings.condition.request.camelToSnake.params).toBe('function');
             expect(typeof eeHttpCaseConverterSettings.condition.response.snakeToCamel).toBe('function');
         });
 
-        describe('request camelToSnake condition', function () {
+        describe('request camelToSnake conditions', function () {
 
-            it('should process requests with params', function () {
+            it('should process requests with params or data', function () {
                 const config = {
                     withParams: {
-                        foo: {},
-                        bar: [],
+                        method: 'GET',
                         params: {},
                     },
-                    withoutParams: {
-                        foo: {},
-                        bar: [],
+                    withData: {
+                        method: 'POST',
+                        data: {},
+                    },
+                    basic: {
+                        method: 'GET',
                     },
                 };
 
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake(config.withoutParams)).toBe(false);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.basic)).toBe(false);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.basic)).toBe(false);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withParams)).toBe(false);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withData)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withData)).toBe(false);
             });
         });
 
@@ -63,8 +70,14 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
         it('should allow to replace requestConfig as a whole', function () {
             module(function (eeHttpCaseConverterSettingsProvider) {
                 eeHttpCaseConverterSettingsProvider.requestConfig = {
-                    camelToSnake: function (requestConfig) {
-                        return !!requestConfig.foo;
+                    // return true for every request config with method defined (every request config has)
+                    camelToSnake: {
+                        data: function (requestConfig) {
+                            return !!requestConfig.method;
+                        },
+                        params: function (requestConfig) {
+                            return !!requestConfig.method;
+                        },
                     },
                 };
             });
@@ -72,19 +85,25 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
             inject(function (eeHttpCaseConverterSettings) {
                 const config = {
                     withParams: {
-                        foo: {},
-                        bar: [],
+                        method: 'GET',
                         params: {},
                     },
-                    withoutParams: {
-                        foo: {},
-                        bar: [],
+                    withData: {
+                        method: 'POST',
+                        data: {},
+                    },
+                    basic: {
+                        method: 'GET',
                     },
                 };
 
                 // both have `foo`
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake(config.withoutParams)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.basic)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.basic)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withData)).toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withData)).toBe(true);
             });
         });
 
