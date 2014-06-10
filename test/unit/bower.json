@@ -1,0 +1,8 @@
+{
+    "name": "angular-http-case-converter-tests",
+    "private": true,
+    "dependencies": {
+        "angular": "v1.3.0-beta.11",
+        "angular-mocks": "v1.3.0-beta.11"
+    }
+}

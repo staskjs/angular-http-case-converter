@@ -1,0 +1,33 @@
+{
+    "name": "angular-http-case-converter",
+    "version": "0.1.0-pre",
+    "homepage": "https://github.com/ee/angular-http-case-converter",
+    "authors": [
+        "Jarek Rencz", "Jarek Rencz <jarek.rencz@laboratorium.ee>"
+    ],
+    "license": "MIT",
+    "description": "A module providing simple way to convert request params and response body on the fly",
+    "main": [
+        "dist/angular-http-case-converter.js"
+    ],
+    "keywords": [
+        "Angular",
+        "AngularJS",
+        "http",
+        "$http",
+        "interceptor",
+        "backend",
+        "REST"
+    ],
+    "dependencies": {
+        "angular": ">= 1.2.0"
+    },
+    "ignore": [
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests",
+        "demo",
+        ".*"
+    ]
+}
