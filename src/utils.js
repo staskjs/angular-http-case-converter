@@ -9,6 +9,7 @@
 
     angular
         .module('ee.$http.CaseConverter.utils', [])
+        // TODO: break down the filters into ee.$http.CaseConverter.filter to make it saner
         .filter('snakeToCamel', function () {
             return function (input) {
                 return input.replace(/_([a-zA-Z0-9])/g, function (all, letter) {

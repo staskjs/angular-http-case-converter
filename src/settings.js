@@ -11,6 +11,9 @@
         .provider('eeHttpCaseConverterSettings', function () {
             const caseConverterSettingsProvider = this;
 
+            // TODO: Allow to define url pattern - this is a common case for all known appliances to filter only known
+            // backend calls and its responses.
+
             caseConverterSettingsProvider.requestConfig = {
                 camelToSnake: {
                     data: function (config) {
