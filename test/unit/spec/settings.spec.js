@@ -67,6 +67,54 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
 
     describe('configuring own settings', function () {
 
+        it('should allow to provide url filtering function', function () {
+            module(function (eeHttpCaseConverterSettingsProvider) {
+                eeHttpCaseConverterSettingsProvider.urlFilter = function (url) {
+                    // math only urls starting with 'foo'
+                    return url.indexOf('foo') === 0;
+                };
+            });
+
+            inject(function (eeHttpCaseConverterSettings) {
+                const config = {
+                    correntUrl: {
+                        withParams: {
+                            url: 'foo/backend/path',
+                            method: 'GET',
+                            params: {},
+                        },
+                        withData: {
+                            url: 'foo/backend/path',
+                            method: 'POST',
+                            data: {},
+                        },
+                    },
+                    wrongUrl: {
+                        withParams: {
+                            url: 'bar/backend/path',
+                            method: 'GET',
+                            params: {},
+                        },
+                        withData: {
+                            url: 'bar/backend/path',
+                            method: 'POST',
+                            data: {},
+                        },
+                    },
+                };
+
+                // both have `foo`
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.correntUrl.withParams))
+                    .toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.correntUrl.withData))
+                    .toBe(true);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.wrongUrl.withParams))
+                    .toBe(false);
+                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.wrongUrl.withData))
+                    .toBe(false);
+            });
+        });
+
         it('should allow to replace requestConfig as a whole', function () {
             module(function (eeHttpCaseConverterSettingsProvider) {
                 eeHttpCaseConverterSettingsProvider.requestConfig = {

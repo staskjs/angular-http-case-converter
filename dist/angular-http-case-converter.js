@@ -18,6 +18,34 @@
 
 /**
  * @author Jarek Rencz <jarek.rencz@laboratorium.ee> - package maintainer
+ * @author Mikołaj Dądela <mikolaj.dadela@laboratorium.ee> - filters code
+ *
+ * (c) Laboratorium EE 2014
+ */
+(function () {
+    'use strict';
+
+    angular
+        .module('ee.$http.CaseConverter.filter', [])
+        .filter('snakeToCamel', function () {
+            return function (input) {
+                return input.replace(/_([a-zA-Z0-9])/g, function (all, letter) {
+                    return letter.toUpperCase();
+                });
+            };
+        })
+        .filter('camelToSnake', function () {
+            return function (input) {
+                return input.replace(/[A-Z]/g, function (letter) {
+                    return '_' + letter.toLowerCase();
+                });
+            };
+        });
+
+})();
+
+/**
+ * @author Jarek Rencz <jarek.rencz@laboratorium.ee> - package maintainer
  * @author Michał Gołębiowski <michal.golebiowski@laboratorium.ee> - original idea
  *
  * (c) Laboratorium EE 2014
@@ -96,14 +124,21 @@
         .provider('eeHttpCaseConverterSettings', function () {
             var caseConverterSettingsProvider = this;
 
+            // This may be replaced with any custom logic callable to provide more precise yet still standard condition.
+            caseConverterSettingsProvider.urlFilter = function () {
+                return true;
+            };
+
             caseConverterSettingsProvider.requestConfig = {
                 camelToSnake: {
                     data: function (config) {
                         // Only POST and PUT methods can have data
-                        return ['PUT', 'POST'].indexOf(config.method) > -1 && !!config.data;
+                        return ['PUT', 'POST'].indexOf(config.method) > -1 &&
+                            !!config.data &&
+                            caseConverterSettingsProvider.urlFilter(config.url);
                     },
                     params: function (config) {
-                        return !!config.params;
+                        return !!config.params && caseConverterSettingsProvider.urlFilter(config.url);
                     },
                 },
             };
@@ -142,21 +177,9 @@
     'use strict';
 
     angular
-        .module('ee.$http.CaseConverter.utils', [])
-        .filter('snakeToCamel', function () {
-            return function (input) {
-                return input.replace(/_([a-zA-Z0-9])/g, function (all, letter) {
-                    return letter.toUpperCase();
-                });
-            };
-        })
-        .filter('camelToSnake', function () {
-            return function (input) {
-                return input.replace(/[A-Z]/g, function (letter) {
-                    return '_' + letter.toLowerCase();
-                });
-            };
-        })
+        .module('ee.$http.CaseConverter.utils', [
+            'ee.$http.CaseConverter.filter',
+        ])
         .service('eeHttpCaseConverterUtils', ["$filter", function ($filter) {
             function createConverterFunction(keyConversionFun) {
                 return function convertObjectKeys(obj) {

@@ -38,15 +38,39 @@ All you have to do is to depend your main module on the chosen package modules:
         'ee.$http.CaseConverter.response.snakeToCamel',
     ])
 
-You may also use `caseConverterSettingsProvider` to define custom conditions under which processing takes place.
-By default every request with any params and every response returned as `application/json` is processed.
-If you wish only certain requests/responses to be process use:
+The most basic filtering of requests is already provided. By default 
+
+* requests with `params` defined have `params` processed,
+* POST and PUT requests (only those may have data) with `data` defined have `data` processed 
+* each response returned as `application/json` is processed.
+
+You may adjust those defaults by providing `urlFilter` function to `eeHttpCaseConverterSettingsProvider`. The function 
+should return `true` for URLs which should be processed and false otherwise:
+
+    myApp.config(function (eeHttpCaseConverterSettingsProvider) {
+        eeHttpCaseConverterSettingsProvider.urlFilter = function (url) {
+            // Your custom logic to decide whether process requests or not. Should return a boolean.
+        }
+    })
+    
+If URL filtering is not enough You may also use `caseConverterSettingsProvider` to define custom conditions under which 
+processing takes place. If you wish only certain requests/responses to be process use:
 
 
     myApp.config(function (eeHttpCaseConverterSettingsProvider) {
         eeHttpCaseConverterSettingsProvider.requestConfig = {
-            camelToSnake: function (requestConfig) {
-                // Your custom logic to decide whether process or not. Should return a boolean.
+            camelToSnake: {
+                params: function (requestConfig) {
+                    // Your custom logic to decide whether to process `params` or not. Should return a boolean.
+                },
+                data: function (requestConfig) {
+                    // Your custom logic to decide whether to process `data` or not. Should return a boolean.
+                }
+            }
+        }
+        eeHttpCaseConverterSettingsProvider.responseConfig = {
+            snakeToCamel: function (response) {
+                // Your custom logic to decide whether to process `response.data` or not. Should return a boolean.
             }
         }
     })

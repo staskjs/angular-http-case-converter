@@ -11,17 +11,21 @@
         .provider('eeHttpCaseConverterSettings', function () {
             const caseConverterSettingsProvider = this;
 
-            // TODO: Allow to define url pattern - this is a common case for all known appliances to filter only known
-            // backend calls and its responses.
+            // This may be replaced with any custom logic callable to provide more precise yet still standard condition.
+            caseConverterSettingsProvider.urlFilter = function () {
+                return true;
+            };
 
             caseConverterSettingsProvider.requestConfig = {
                 camelToSnake: {
                     data: function (config) {
                         // Only POST and PUT methods can have data
-                        return ['PUT', 'POST'].indexOf(config.method) > -1 && !!config.data;
+                        return ['PUT', 'POST'].indexOf(config.method) > -1 &&
+                            !!config.data &&
+                            caseConverterSettingsProvider.urlFilter(config.url);
                     },
                     params: function (config) {
-                        return !!config.params;
+                        return !!config.params && caseConverterSettingsProvider.urlFilter(config.url);
                     },
                 },
             };

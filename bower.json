@@ -1,6 +1,6 @@
 {
     "name": "angular-http-case-converter",
-    "version": "0.1.0-pre",
+    "version": "0.0.1",
     "homepage": "https://github.com/ee/angular-http-case-converter",
     "authors": [
         "Jarek Rencz", "Jarek Rencz <jarek.rencz@laboratorium.ee>"
