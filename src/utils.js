@@ -8,22 +8,9 @@
     'use strict';
 
     angular
-        .module('ee.$http.CaseConverter.utils', [])
-        // TODO: break down the filters into ee.$http.CaseConverter.filter to make it saner
-        .filter('snakeToCamel', function () {
-            return function (input) {
-                return input.replace(/_([a-zA-Z0-9])/g, function (all, letter) {
-                    return letter.toUpperCase();
-                });
-            };
-        })
-        .filter('camelToSnake', function () {
-            return function (input) {
-                return input.replace(/[A-Z]/g, function (letter) {
-                    return '_' + letter.toLowerCase();
-                });
-            };
-        })
+        .module('ee.$http.CaseConverter.utils', [
+            'ee.$http.CaseConverter.filter',
+        ])
         .service('eeHttpCaseConverterUtils', function ($filter) {
             function createConverterFunction(keyConversionFun) {
                 return function convertObjectKeys(obj) {
