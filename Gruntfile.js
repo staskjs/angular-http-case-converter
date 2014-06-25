@@ -70,14 +70,12 @@ module.exports = function (grunt) {
             },
         },
         watch: {
-            livereload: {
+            test: {
                 files: [
                     'src/**/*.js',
+                    'test/**/*.js',
                 ],
-                options: {
-                    livereload: true,
-                },
-                tasks: ['build'],
+                tasks: ['test'],
             },
         },
         jshint: {
@@ -143,18 +141,13 @@ module.exports = function (grunt) {
         'clean:tmp',
     ]);
 
-    grunt.registerTask('serve', [
-        'build',
-        'watch',
-    ]);
-
     grunt.registerTask('test', [
-        'lint',
-        'defs',
+        'build',
         'karma:unit',
     ]);
 
     grunt.registerTask('default', [
-        'serve',
+        'test',
+        'watch',
     ]);
 };

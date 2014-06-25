@@ -8,29 +8,29 @@
 
     angular
         .module('ee.$http.CaseConverter.settings', [])
-        .provider('eeHttpCaseConverterSettings', function () {
-            const caseConverterSettingsProvider = this;
+        .provider('eeHttpCaseConverter', function () {
+            const caseConverterProvider = this;
 
             // This may be replaced with any custom logic callable to provide more precise yet still standard condition.
-            caseConverterSettingsProvider.urlFilter = function () {
+            caseConverterProvider.urlFilter = function () {
                 return true;
             };
 
-            caseConverterSettingsProvider.requestConfig = {
+            caseConverterProvider.requestConfig = {
                 camelToSnake: {
                     data: function (config) {
                         // Only POST and PUT methods can have data
                         return ['PUT', 'POST'].indexOf(config.method) > -1 &&
                             !!config.data &&
-                            caseConverterSettingsProvider.urlFilter(config.url);
+                            caseConverterProvider.urlFilter(config.url);
                     },
                     params: function (config) {
-                        return !!config.params && caseConverterSettingsProvider.urlFilter(config.url);
+                        return !!config.params && caseConverterProvider.urlFilter(config.url);
                     },
                 },
             };
 
-            caseConverterSettingsProvider.responseConfig = {
+            caseConverterProvider.responseConfig = {
                 snakeToCamel: function (response) {
                     const contentTypeHeader = response.headers('content-type');
                     return !!contentTypeHeader && contentTypeHeader
@@ -42,11 +42,11 @@
                 },
             };
 
-            caseConverterSettingsProvider.$get = function () {
+            caseConverterProvider.$get = function () {
                 return {
                     condition: {
-                        request: caseConverterSettingsProvider.requestConfig,
-                        response: caseConverterSettingsProvider.responseConfig,
+                        request: caseConverterProvider.requestConfig,
+                        response: caseConverterProvider.responseConfig,
                     },
                 };
             };

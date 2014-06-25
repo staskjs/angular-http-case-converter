@@ -5,16 +5,16 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
 
     describe('predefined settings', function () {
 
-        let eeHttpCaseConverterSettings;
+        let eeHttpCaseConverter;
 
-        beforeEach(inject(function (_eeHttpCaseConverterSettings_) {
-            eeHttpCaseConverterSettings = _eeHttpCaseConverterSettings_;
+        beforeEach(inject(function (_eeHttpCaseConverter_) {
+            eeHttpCaseConverter = _eeHttpCaseConverter_;
         }));
 
         it('should be an object with 3 conditions predefined', function () {
-            expect(typeof eeHttpCaseConverterSettings.condition.request.camelToSnake.data).toBe('function');
-            expect(typeof eeHttpCaseConverterSettings.condition.request.camelToSnake.params).toBe('function');
-            expect(typeof eeHttpCaseConverterSettings.condition.response.snakeToCamel).toBe('function');
+            expect(typeof eeHttpCaseConverter.condition.request.camelToSnake.data).toBe('function');
+            expect(typeof eeHttpCaseConverter.condition.request.camelToSnake.params).toBe('function');
+            expect(typeof eeHttpCaseConverter.condition.response.snakeToCamel).toBe('function');
         });
 
         describe('request camelToSnake conditions', function () {
@@ -34,12 +34,12 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                     },
                 };
 
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.basic)).toBe(false);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.basic)).toBe(false);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withParams)).toBe(false);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withParams)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withData)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withData)).toBe(false);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.basic)).toBe(false);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.basic)).toBe(false);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.withParams)).toBe(false);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.withData)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.withData)).toBe(false);
             });
         });
 
@@ -59,8 +59,8 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                     },
                 };
 
-                expect(eeHttpCaseConverterSettings.condition.response.snakeToCamel(response.xml)).toBe(false);
-                expect(eeHttpCaseConverterSettings.condition.response.snakeToCamel(response.json)).toBe(true);
+                expect(eeHttpCaseConverter.condition.response.snakeToCamel(response.xml)).toBe(false);
+                expect(eeHttpCaseConverter.condition.response.snakeToCamel(response.json)).toBe(true);
             });
         });
     });
@@ -68,14 +68,14 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
     describe('configuring own settings', function () {
 
         it('should allow to provide url filtering function', function () {
-            module(function (eeHttpCaseConverterSettingsProvider) {
-                eeHttpCaseConverterSettingsProvider.urlFilter = function (url) {
+            module(function (eeHttpCaseConverterProvider) {
+                eeHttpCaseConverterProvider.urlFilter = function (url) {
                     // math only urls starting with 'foo'
                     return url.indexOf('foo') === 0;
                 };
             });
 
-            inject(function (eeHttpCaseConverterSettings) {
+            inject(function (eeHttpCaseConverter) {
                 const config = {
                     correntUrl: {
                         withParams: {
@@ -104,20 +104,20 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                 };
 
                 // both have `foo`
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.correntUrl.withParams))
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.correntUrl.withParams))
                     .toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.correntUrl.withData))
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.correntUrl.withData))
                     .toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.wrongUrl.withParams))
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.wrongUrl.withParams))
                     .toBe(false);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.wrongUrl.withData))
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.wrongUrl.withData))
                     .toBe(false);
             });
         });
 
         it('should allow to replace requestConfig as a whole', function () {
-            module(function (eeHttpCaseConverterSettingsProvider) {
-                eeHttpCaseConverterSettingsProvider.requestConfig = {
+            module(function (eeHttpCaseConverterProvider) {
+                eeHttpCaseConverterProvider.requestConfig = {
                     // return true for every request config with method defined (every request config has)
                     camelToSnake: {
                         data: function (requestConfig) {
@@ -130,7 +130,7 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                 };
             });
 
-            inject(function (eeHttpCaseConverterSettings) {
+            inject(function (eeHttpCaseConverter) {
                 const config = {
                     withParams: {
                         method: 'GET',
@@ -146,25 +146,25 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                 };
 
                 // both have `foo`
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.basic)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.basic)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withParams)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withParams)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.data(config.withData)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.request.camelToSnake.params(config.withData)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.basic)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.basic)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.withParams)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.data(config.withData)).toBe(true);
+                expect(eeHttpCaseConverter.condition.request.camelToSnake.params(config.withData)).toBe(true);
             });
         });
 
         it('should allow to replace responseConfig as a whole', function () {
-            module(function (eeHttpCaseConverterSettingsProvider) {
-                eeHttpCaseConverterSettingsProvider.responseConfig = {
+            module(function (eeHttpCaseConverterProvider) {
+                eeHttpCaseConverterProvider.responseConfig = {
                     snakeToCamel: function () {
                         return true;
                     },
                 };
             });
 
-            inject(function (eeHttpCaseConverterSettings) {
+            inject(function (eeHttpCaseConverter) {
                 const response = {
                     json: {
                         headers: function (headerName) {
@@ -179,8 +179,8 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                 };
 
                 // each response will now match
-                expect(eeHttpCaseConverterSettings.condition.response.snakeToCamel(response.xml)).toBe(true);
-                expect(eeHttpCaseConverterSettings.condition.response.snakeToCamel(response.json)).toBe(true);
+                expect(eeHttpCaseConverter.condition.response.snakeToCamel(response.xml)).toBe(true);
+                expect(eeHttpCaseConverter.condition.response.snakeToCamel(response.json)).toBe(true);
             });
         });
 

@@ -14,10 +14,10 @@
         ])
         .config(function ($provide, $httpProvider) {
             $provide.factory('httpCaseConverterSnakeToCamelResponseInterceptor',
-                function (eeHttpCaseConverterUtils, eeHttpCaseConverterSettings) {
+                function (eeHttpCaseConverterUtils, eeHttpCaseConverter) {
                     return {
                         response: function (response) {
-                            if (eeHttpCaseConverterSettings.condition.response.snakeToCamel(response)) {
+                            if (eeHttpCaseConverter.condition.response.snakeToCamel(response)) {
                                 response.data = eeHttpCaseConverterUtils.convertKeyCase.snakeToCamel(response.data);
                             }
                             return response;

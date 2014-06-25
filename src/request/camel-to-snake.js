@@ -14,14 +14,14 @@
         ])
         .config(function ($provide, $httpProvider) {
             $provide.factory('httpCaseConverterCamelToSnakeRequestInterceptor',
-                function (eeHttpCaseConverterUtils, eeHttpCaseConverterSettings) {
+                function (eeHttpCaseConverterUtils, eeHttpCaseConverter) {
                     return {
                         request: function (requestConfig) {
-                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake.data(requestConfig)) {
+                            if (eeHttpCaseConverter.condition.request.camelToSnake.data(requestConfig)) {
                                 requestConfig.data =
                                     eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(requestConfig.data);
                             }
-                            if (eeHttpCaseConverterSettings.condition.request.camelToSnake.params(requestConfig)) {
+                            if (eeHttpCaseConverter.condition.request.camelToSnake.params(requestConfig)) {
                                 requestConfig.params =
                                     eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(requestConfig.params);
                             }
