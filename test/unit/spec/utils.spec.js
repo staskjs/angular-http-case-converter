@@ -23,6 +23,28 @@ describe('Package: ee.$http.CaseConverter, Module: utils', function () {
                 .toEqual(testUnitMock.afterCamelToSnake);
         });
 
+        it('should leave Date instances unchanged', function () {
+            const now = new Date();
+            const input = {fooBar: now};
+            const expected = {'foo_bar': now};
+            expect(eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(input))
+                .toEqual(expected);
+        });
+
+        it('should leave Null instances unchanged', function () {
+            const input = {fooBar: null};
+            const expected = {'foo_bar': null};
+            expect(eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(input))
+                .toEqual(expected);
+        });
+
+        it('should leave Function instances unchanged', function () {
+            const fn = function () {};
+            const input = {fooBar: fn};
+            const expected = {'foo_bar': fn};
+            expect(eeHttpCaseConverterUtils.convertKeyCase.camelToSnake(input))
+                .toEqual(expected);
+        });
     });
 
 });
