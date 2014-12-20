@@ -132,8 +132,8 @@
             caseConverterProvider.requestConfig = {
                 camelToSnake: {
                     data: function (config) {
-                        // Only POST and PUT methods can have data
-                        return ['PUT', 'POST'].indexOf(config.method) > -1 &&
+                        // Only PATCH, POST, PUT methods can have data
+                        return ['PATCH', 'POST', 'PUT'].indexOf(config.method) > -1 &&
                             !!config.data &&
                             caseConverterProvider.urlFilter(config.url);
                     },
