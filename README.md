@@ -6,7 +6,7 @@ Module provides a way to convert requests and responses on the fly in a drop-in 
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-  - [How it works?](#how-it-works)
+- [How it works?](#how-it-works)
 - [How to use?](#how-to-use)
 - [License](#license)
 
