@@ -31,10 +31,6 @@
 
     "requireOperatorBeforeLineBreak": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
 
-    "requireLeftStickedOperators": [","],
-    "disallowLeftStickedOperators": ["?"],
-    "disallowRightStickedOperators": ["?", ":"],
-
     "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
     "requireSpaceBeforeBinaryOperators": ["/", "+", "-", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],

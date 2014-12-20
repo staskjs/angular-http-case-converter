@@ -12,9 +12,6 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         defs: {
             options: {
-                transformDest: function transformDest(path) {
-                    return path.replace(/\.js$/, '.defs.js');
-                },
                 defsOptions: {
                     disallowDuplicated: true,
                     disallowUnknownReferences: false,
@@ -22,15 +19,29 @@ module.exports = function (grunt) {
                 },
             },
             src: {
-                src: [
-                    'src/**/*.js',
-                    '!src/**/*.defs.js',
+                files: [
+                    {
+                        expand: true,
+                        extDot: 'last',
+                        ext: '.defs.js',
+                        src: [
+                            'src/**/*.js',
+                            '!src/**/*.defs.js',
+                        ],
+                    },
                 ],
             },
             test: {
-                src: [
-                    'test/unit/spec/**/*.spec.js',
-                    '!test/unit/spec/**/*.spec.defs.js',
+                files: [
+                    {
+                        expand: true,
+                        extDot: 'last',
+                        ext: '.defs.js',
+                        src: [
+                            'test/unit/spec/**/*.spec.js',
+                            '!test/unit/spec/**/*.spec.defs.js',
+                        ],
+                    },
                 ],
             },
         },
