@@ -96,13 +96,21 @@
         ])
         .config(["$provide", "$httpProvider", function ($provide, $httpProvider) {
             $provide.factory('httpCaseConverterSnakeToCamelResponseInterceptor',
-                ["eeHttpCaseConverterUtils", "eeHttpCaseConverter", function (eeHttpCaseConverterUtils, eeHttpCaseConverter) {
+                ["$q", "eeHttpCaseConverterUtils", "eeHttpCaseConverter", function ($q, eeHttpCaseConverterUtils, eeHttpCaseConverter) {
+                    var convert = function (response) {
+                      if (eeHttpCaseConverter.condition.response.snakeToCamel(response)) {
+                          response.data = eeHttpCaseConverterUtils.convertKeyCase.snakeToCamel(response.data);
+                      }
+
+                      return response;
+                    };
+
                     return {
                         response: function (response) {
-                            if (eeHttpCaseConverter.condition.response.snakeToCamel(response)) {
-                                response.data = eeHttpCaseConverterUtils.convertKeyCase.snakeToCamel(response.data);
-                            }
-                            return response;
+                            return convert(response);
+                        },
+                        responseError: function (response) {
+                            return $q.reject(convert(response));
                         },
                     };
                 }]);
