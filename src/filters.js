@@ -9,19 +9,21 @@
 
     angular
         .module('ee.$http.CaseConverter.filter', [])
-        .filter('snakeToCamel', function () {
-            return function (input) {
-                return input.replace(/_([a-zA-Z0-9])/g, function (all, letter) {
-                    return letter.toUpperCase();
-                });
-            };
+        .constant('eeHttpSnakeToCamelFilterFn', function (input) {
+            return input.replace(/_([a-zA-Z0-9])/g, function (all, letter) {
+                return letter.toUpperCase();
+            });
         })
-        .filter('camelToSnake', function () {
-            return function (input) {
-                return input.replace(/[A-Z]/g, function (letter) {
-                    return '_' + letter.toLowerCase();
-                });
-            };
+        .constant('eeHttpCamelToSnakeFilterFn', function (input) {
+            return input.replace(/[A-Z]/g, function (letter) {
+                return '_' + letter.toLowerCase();
+            });
+        })
+        .filter('snakeToCamel', function (eeHttpSnakeToCamelFilterFn) {
+            return eeHttpSnakeToCamelFilterFn;
+        })
+        .filter('camelToSnake', function (eeHttpCamelToSnakeFilterFn) {
+            return eeHttpCamelToSnakeFilterFn;
         });
 
 })();
