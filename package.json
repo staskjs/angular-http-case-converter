@@ -1,6 +1,6 @@
 {
   "name": "angular-http-case-converter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A module providing simple way to convert request params and response body of backend requests",
   "scripts": {
     "test": "grunt test"
