@@ -5,6 +5,7 @@
   "scripts": {
     "test": "grunt test"
   },
+  "main": "dist/angular-http-case-converter.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ee/angular-http-case-converter.git"
