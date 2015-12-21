@@ -38,7 +38,8 @@
             caseConverterProvider.responseConfig = {
                 snakeToCamel: function (response) {
                     const contentTypeHeader = response.headers('content-type');
-                    return !!contentTypeHeader && caseConverterProvider.responseUrlFilter(response.config.url) && contentTypeHeader
+                    const isValid = caseConverterProvider.responseUrlFilter(response.config.url);
+                    return !!contentTypeHeader && isValid && contentTypeHeader
                         .split(';')
                         .map(function (header) {
                             return header.trim();
