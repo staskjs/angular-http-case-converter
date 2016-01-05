@@ -51,11 +51,13 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
                         headers: function (headerName) {
                             return headerName === 'content-type' ? 'foo; bar; application/json;' : '';
                         },
+                        config: {url: ''},
                     },
                     xml: {
                         headers: function (headerName) {
                             return headerName === 'content-type' ? 'foo; bar; application/xml;' : '';
                         },
+                        config: {url: ''},
                     },
                 };
 
@@ -69,7 +71,7 @@ describe('Package: ee.$http.CaseConverter, Module: settings', function () {
 
         it('should allow to provide url filtering function', function () {
             module(function (eeHttpCaseConverterProvider) {
-                eeHttpCaseConverterProvider.urlFilter = function (url) {
+                eeHttpCaseConverterProvider.requestUrlFilter = function (url) {
                     // math only urls starting with 'foo'
                     return url.indexOf('foo') === 0;
                 };
