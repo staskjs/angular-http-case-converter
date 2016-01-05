@@ -135,7 +135,12 @@
             var caseConverterProvider = this;
 
             // This may be replaced with any custom logic callable to provide more precise yet still standard condition.
-            caseConverterProvider.urlFilter = function () {
+            caseConverterProvider.requestUrlFilter = function () {
+                return true;
+            };
+
+            // This may be replaced with any custom logic callable to provide more precise yet still standard condition.
+            caseConverterProvider.responseUrlFilter = function () {
                 return true;
             };
 
@@ -145,10 +150,10 @@
                         // Only PATCH, POST, PUT methods can have data
                         return ['PATCH', 'POST', 'PUT'].indexOf(config.method) > -1 &&
                             !!config.data &&
-                            caseConverterProvider.urlFilter(config.url);
+                            caseConverterProvider.requestUrlFilter(config.url);
                     },
                     params: function (config) {
-                        return !!config.params && caseConverterProvider.urlFilter(config.url);
+                        return !!config.params && caseConverterProvider.requestUrlFilter(config.url);
                     },
                 },
             };
@@ -156,7 +161,8 @@
             caseConverterProvider.responseConfig = {
                 snakeToCamel: function (response) {
                     var contentTypeHeader = response.headers('content-type');
-                    return !!contentTypeHeader && contentTypeHeader
+                    var isValid = caseConverterProvider.responseUrlFilter(response.config.url);
+                    return !!contentTypeHeader && isValid && contentTypeHeader
                         .split(';')
                         .map(function (header) {
                             return header.trim();
